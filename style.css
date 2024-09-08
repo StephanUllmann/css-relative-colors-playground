@@ -157,6 +157,20 @@ main {
   container-type: inline-size;
 }
 
+@property --deg {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes rotate {
+  from {
+    --deg: 0deg;
+  }
+  to {
+    --deg: 360deg;
+  }
+}
+
 .cards {
   --g: 2cqw;
   --h: 20cqw;
@@ -189,12 +203,13 @@ main {
     transform-style: preserve-3d;
 
     &::before {
+      --deg: 0deg;
       content: '';
       position: absolute;
-      inset: -3px;
+      inset: 0px;
       background-color: var(--contrast-500);
       background-image: conic-gradient(
-        in oklch,
+        from var(--deg) in oklch,
         var(--contrast-500),
         var(--secondary-500),
         var(--accent-500),
@@ -204,14 +219,15 @@ main {
       box-shadow: var(--shadow-sm);
       /* z-index: -1; */
       transform: translateZ(-1px);
+      transition: inset 200ms ease-in-out;
     }
     &::after {
       content: '';
       position: absolute;
-      inset: -5px;
+      inset: 3px;
       background-color: var(--contrast-500);
       background-image: conic-gradient(
-        in oklch,
+        from var(--deg) in oklch,
         var(--contrast-500),
         var(--secondary-500),
         var(--accent-500),
@@ -222,8 +238,18 @@ main {
       /* z-index: -1; */
       transform: translateZ(-2px);
       filter: blur(5px);
+      transition: inset 200ms ease-in-out;
     }
-
+    &:hover::before {
+      inset: -3px;
+      transition: inset 200ms ease-in-out;
+      animation: rotate 4000ms linear forwards infinite;
+    }
+    &:hover::after {
+      inset: -5px;
+      transition: inset 200ms ease-in-out;
+      animation: rotate 4000ms linear forwards infinite;
+    }
     & > * {
       transform: skewY(5deg);
     }
